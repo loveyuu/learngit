@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/go-martini/martini"
 	"model"
 )
 
@@ -30,4 +31,10 @@ func main() {
 	stu := new(model.Student)
 	stu.NewStudent("Suzhou", "Wuxi")
 	stu.Show()
+
+	mt := martini.Classic()
+	mt.Get("/", func() string {
+		return "Hello world!"
+	})
+	mt.Run()
 }

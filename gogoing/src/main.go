@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
+	m := make(map[string]model.Student)
 	dataArray := [5]model.Student{}
 
 	fmt.Println(dataArray)
@@ -16,7 +17,12 @@ func main() {
 
 	for i, v := range dataArray {
 		fmt.Println(i)
+		m[v.GetName()] = v
 		v.Show()
+	}
+
+	for k, v := range m {
+		fmt.Println(k, v)
 	}
 
 	fmt.Println(dataArray)

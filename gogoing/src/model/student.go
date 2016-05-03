@@ -20,3 +20,7 @@ func (s *Student) NewStudent(name, password string) {
 func (s *Student) Show() {
 	fmt.Println(s.name, s.password)
 }
+
+func (s *Student) GetName() string {
+	return s.name
+}

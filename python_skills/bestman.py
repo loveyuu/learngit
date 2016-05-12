@@ -138,3 +138,19 @@ class WeightedRandomGenerator(object):
 # 每次获取随机数的消耗会变得小很多, 在调用次数超过1000次的时候, 
 # WeightedRandomGenerator的速度是weighted_choice的100倍,
 # 所以我们在对同一组权重列表进行多次计算的时候选择方法4, 如果少于100次, 则使用方法3
+
+#字符串
+data = "linbinisgoodman"
+
+def mando(data, step):
+    start, length = 0, len(data)
+    while start <= length:
+        yield data[start:start+step]
+        start += step
+
+print type(mando(data, 6))  # <type 'generator'>
+for i in mando(data, 6):
+	print i 
+#linbin
+#isgood
+#man

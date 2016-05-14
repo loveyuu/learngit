@@ -139,7 +139,7 @@ class WeightedRandomGenerator(object):
 # WeightedRandomGenerator的速度是weighted_choice的100倍,
 # 所以我们在对同一组权重列表进行多次计算的时候选择方法4, 如果少于100次, 则使用方法3
 
-#字符串
+# 字符串
 data = "linbinisgoodman"
 
 def mando(data, step):
@@ -151,6 +151,27 @@ def mando(data, step):
 print type(mando(data, 6))  # <type 'generator'>
 for i in mando(data, 6):
 	print i 
-#linbin
-#isgood
-#man
+# linbin
+# isgood
+# man
+
+# 异常
+def data_verify(name, book=None):
+    book = [] if book is None else book  # 本来是不错滴,但是他妈的传个字典集合等非列表的元素进去就蒙圈了
+    try:
+        book.append(name)
+    except Exception:
+        raise ValueError("the book you input is not dict")
+    else:
+        return book
+    finally:
+        print 'program is over'
+
+try:
+    # a = {'name': 12}
+    a = ['yanyu']
+    arg = data_verify('linbin', a)
+except ValueError as e:
+    print e
+else:
+    print arg

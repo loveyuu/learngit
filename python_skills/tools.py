@@ -10,12 +10,27 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 import xlrd
 import os
+import shutil
 
 file_list = os.listdir(os.getcwd())
 handle_file_list = [
     i for i in file_list if i.endswith('.xlsx') or i.endswith('.xls')]
 
+if os.path.exists('lua'):
+    shutil.rmtree('lua')
 os.mkdir('lua')
+
+
+def do(t, v):
+    if t == "0":
+        if type(v) == str:
+            v = 0
+        return str(int(v))
+    else:
+        if type(v) == float:
+            v = int(v)
+        return '"%s"' % v
+
 for f in handle_file_list:
     f_name = f.replace(
         '.', '_')[:-5] if f.endswith('.xlsx') else f.replace('.', '_')[:-4]
@@ -30,33 +45,22 @@ for f in handle_file_list:
         "---@classdef %s\nlocal %s = {}\n\n" % (record_name, record_name))
     default_value, attr_desc = [], []
 
-    for i in xrange(5):
-        if i == 1:
-            for v in table.row_values(i):
-                dv = "0" if v == 'int' else '""'
-                default_value.append(dv)
-        elif i == 2:
-            for v in table.row_values(i):
-                attr_desc.append(v)
-        elif i == 4:
-            for v, d, attr in zip(table.row_values(i), default_value, attr_desc):
-                da.write("%s.%s = %s --%s\n" % (record_name, v, d, attr))
+    for v in table.row_values(1):
+        dv = "0" if v == 'int' else '""'
+        default_value.append(dv)
 
-    def do(t, v):
-        if t == "0":
-            if type(v) == str:
-                v = 0
-            return str(int(v))
-        else:
-            if type(v) == float:
-                v = int(v)
-            return '"%s"' % v
+    for v in table.row_values(2):
+        attr_desc.append(v)
+
+    for v, d, attr in zip(table.row_values(4), default_value, attr_desc):
+        da.write("%s.%s = %s --%s\n" % (record_name, v, d, attr))
+
     da.write("%s = {\n   _data = {\n    " % (f_name))
     id_index = {}
     for i in xrange(5, nrows):
         row_data = table.row_values(i)
-        exs = "{" + ','.join([do(t, v)
-                              for t, v in zip(default_value, row_data)]) + ",},"
+        exs = "{"+','.join([do(t, v)
+                            for t, v in zip(default_value, row_data)])+",},"
         da.write("[%d] = %s\n    " %
                  (i-4, exs))
         print exs

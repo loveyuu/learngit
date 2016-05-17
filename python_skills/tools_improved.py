@@ -8,6 +8,7 @@
 2016/5/18
 基于多进程,由于此类型计算属于cpu密集型
 参考：https://segmentfault.com/a/1190000000414339#articleHeader5
+性能提高了很多很多
 """
 import sys
 reload(sys)

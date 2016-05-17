@@ -9,6 +9,8 @@
 基于多进程,由于此类型计算属于cpu密集型
 参考：https://segmentfault.com/a/1190000000414339#articleHeader5
 性能提高了很多很多
+更换了几个文件处理函数,使用官方库自带的替换自己写的,更加简洁,甚至高效
+参考: http://blog.csdn.net/scelong/article/details/6971917
 """
 import sys
 reload(sys)
@@ -19,6 +21,7 @@ import os
 import shutil
 from multiprocessing import Pool
 import time
+import glob
 
 
 def do(t, v):
@@ -33,8 +36,7 @@ def do(t, v):
 
 
 def hang(f):
-    f_name = f.replace(
-        '.', '_')[:-5] if f.endswith('.xlsx') else f.replace('.', '_')[:-4]
+    f_name, _ = os.path.splitext(f.replace('.', '_'))  # 文件名,扩展名分离
     record_name = 'record_' + f_name
     print "now loading {0}...wait for a moment".format(f)
     data = xlrd.open_workbook(f)
@@ -175,18 +177,17 @@ end\n\n
     print "{0} is loaded".format(f)
 
 if __name__ == '__main__':
-
+    print "Start loading data..."
     s = time.time()
     file_list = os.listdir(os.getcwd())
-    handle_file_list = [
-        i for i in file_list if i.endswith('.xlsx') or i.endswith('.xls')]
+    handle_file_list = glob.glob('*.xls*')  # 文件名匹配
 
     if os.path.exists('lua'):
-        shutil.rmtree('lua')
+        shutil.rmtree('lua')  # 删除目录树
     os.mkdir('lua')
 
     pool = Pool()
-    pool.map(hang, handle_file_list)
+    pool.map(hang, handle_file_list)  # 重点！！！！！！！！！值得理解(未完待续)
     pool.close()
     pool.join()
     print "all successfully!", time.time() - s

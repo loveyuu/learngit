@@ -1,4 +1,13 @@
 # encoding=utf-8
-import torndb
+from playhouse.pool import PooledMySQLDatabase
 
-conn = torndb.Connection('192.168.100.243', 'any_time', user='root', password='abcd.1234')
+
+db = PooledMySQLDatabase(
+    'any_time',
+    max_connections=32,
+    stale_timeout=300,  # 5 minutes.
+    host="192.168.100.243",
+    user="root",
+    passwd="abcd.1234")
+
+db.connect()

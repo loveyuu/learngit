@@ -20,11 +20,22 @@ class _Model(object):
         return self.item
 
 
+def ta_name(name):
+    name_list = list(name)
+
+    def action(nl):
+        for v in nl:
+            if 65 <= ord(v) <= 90:
+                v = '_' + v
+            yield v
+    return ''.join(action(name_list))[1:].lower()
+
+
 class _Manager(object):
 
     @classmethod
     def dict_all(cls):
-        return cls.find_all("select * from {0}".format(cls.__name__.lower()))
+        return cls.find_all("select * from {0}".format(ta_name(cls.__name__)))
 
     @staticmethod
     def find_all(sql):
@@ -42,9 +53,9 @@ conn = persist.connection()
 
 
 def test():
-    class M_career_info(_Manager):  # 类名与数据库表对应，自定规则
+    class MCareer(_Manager):  # 类名与数据库表对应，自定规则
         pass
-    s = M_career_info.dict_all()
+    s = MCareer.dict_all()
     for i in s:
         print i.name
 

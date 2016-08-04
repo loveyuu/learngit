@@ -2,6 +2,12 @@
 """
 非常高兴把这个tornado结合celery结合起来了，能跑通，并且有了不阻塞的效果
 redis有点坑爹，最好不要用，rabbitq比较好，很出色
+
+celery -A tasks worker --loglevel=info
+如果是redis 后面要加 --pool=solo 否则得不到结果
+但是很蛋疼 celery变成单线程 多个任务阻塞线性执行
+效果很垃圾
+原因不知道
 """
 import tornado.httpserver
 import tornado.ioloop

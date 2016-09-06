@@ -1,0 +1,43 @@
+{% extends 'base/base.html' %}
+
+{% block title %}神奇的斌哥{% endblock %}
+
+{% block body_block %}
+
+    <div class="container">
+        <div class="row">
+            <div class="list-group container col-lg-9">
+                <ul>
+                    {% for article in object_list %}
+                        <a href="{% url 'detail' article.id %}" class="list-group-item">{{ article.title }}</a>
+                    {% empty %}
+                        <li class="alert alert-danger">No articles yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-lg-3">
+	            {% include "side.html" %}
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center text-capitalize">
+        <ul class="pagination">
+          <li><a href="{{ request.path }}?page=1">«</a></li>
+          {% if page_obj.has_previous %}
+            <li><a href="{{ request.path }}?&page={{ page_obj.previous_page_number }}">上一页</a></li>
+          {% else %}
+            <li class="previous disabled"><a>上一页</a></li>
+          {% endif %}
+          {% for i in page_obj.paginator.page_range %}
+            <li {% if page_obj.number == i %}class="active"{% endif %}><a href="{{ request.path }}?page={{ i }}">{{ i }}</a></li>
+          {% endfor %}
+          {% if page_obj.has_next %}
+            <li><a href="{{ request.path }}?page={{ page_obj.next_page_number }}">下一页</a></li>
+          {% else %}
+            <li class="previous disabled"><a>下一页</a></li>
+          {% endif %}
+          <li><a href="{{ request.path }}?page={{ page_obj.paginator.num_pages }}">»</a></li>
+        </ul>
+    </div>
+{% endblock %}

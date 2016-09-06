@@ -1,0 +1,16 @@
+{% extends 'base/base.html' %}
+{% load custom_markdown %}
+{% block title %}神奇的斌哥{% endblock %}
+
+{% block body_block %}
+    <div class="container">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ blog.title }}</h3>
+            </div>
+            <div class="panel-body">
+                {{ blog.content|custom_markdown}}
+            </div>
+        </div>
+    </div>
+{% endblock %}
